@@ -64,7 +64,7 @@ export default function Recipes() {
             onChange={setSearchTerm}
           />
         </div>
-        <div className="w-full md:w-64">
+        <div className="">
           <CategoryFilter
             onSelectCategory={handleCategorySelect}
             value={selectedCategory}

@@ -15,7 +15,7 @@ export default function CategoryFilter({ onSelectCategory, value }) {
 
   return (
     <div className="mb-6 relative z-10">
-      <label className="block mb-2 text-lg font-medium">Filter by Category</label>
+      <label className="block mb-2 text-md font-medium">Filter by Category</label>
       <select
         value={value}
         onChange={(e) => onSelectCategory(e.target.value)}
