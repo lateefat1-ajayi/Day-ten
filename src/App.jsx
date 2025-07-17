@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import Recipes from './pages/Recipes';
@@ -6,7 +6,7 @@ import Recipes from './pages/Recipes';
 
 export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <div className="min-h-screen bg-white text-gray-800 font-sans">
         <Navbar />
         <Routes>
@@ -14,6 +14,6 @@ export default function App() {
           <Route path="/recipes" element={<Recipes />} />
         </Routes>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
