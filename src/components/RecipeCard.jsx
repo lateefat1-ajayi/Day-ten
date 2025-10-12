@@ -7,7 +7,7 @@ export default function RecipeCard({ recipe }) {
         className="w-full h-48 object-cover"
       />
       <div className="p-4">
-        <h3 className="font-semibold text-lg mb-2 text-amber-600">{recipe.strMeal}</h3>
+        <h3 className="font-semibold text-lg mb-2 text-orange-600">{recipe.strMeal}</h3>
         <a
           href={recipe.strYoutube}
           target="_blank"
