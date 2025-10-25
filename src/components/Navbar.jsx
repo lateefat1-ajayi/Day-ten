@@ -1,56 +1,102 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import ThemeToggle from './ThemeToggle';
+import Logo from './Logo';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // Simulate user authentication state - in real app this would come from context/state
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
+  const location = useLocation();
+
+  const handleLogout = () => {
+    logout();
+    setIsMenuOpen(false);
+  };
+
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="mx-4 mt-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg border border-gray-200/50 dark:border-gray-700/50 rounded-lg sticky top-0 z-50">
+      <div className="px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-orange-800">
-            Dishcovery
-          </Link>
+          <Logo />
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
-              Home
-            </Link>
-            <Link to="/about" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+          <div className="hidden md:flex items-center space-x-6">
+            <Link 
+              to="/about" 
+              className={`font-medium transition-colors px-3 py-2 rounded-lg ${
+                isActive('/about') 
+                  ? 'bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300' 
+                  : 'text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`}
+            >
               About
             </Link>
-            {isLoggedIn && (
-              <Link to="/dashboard" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+            {isAuthenticated && (
+              <Link 
+                to="/dashboard" 
+                className={`font-medium transition-colors px-3 py-2 rounded-lg ${
+                  isActive('/dashboard') 
+                    ? 'bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300' 
+                    : 'text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                }`}
+              >
                 Dashboard
               </Link>
             )}
             
+            {/* Theme Toggle */}
+            <div className="flex items-center px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+              <ThemeToggle />
+            </div>
+            
             {/* Auth Buttons */}
-            <div className="flex items-center space-x-4">
-              <Link 
-                to="/login" 
-                className="text-orange-600 hover:text-orange-700 font-medium transition-colors"
-              >
-                Sign In
-              </Link>
-              <Link 
-                to="/register" 
-                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-              >
-                Sign Up
-              </Link>
+            <div className="flex items-center space-x-3">
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-lg text-white">
+                    <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-medium">{user?.name?.charAt(0)}</span>
+                    </div>
+                    <span className="text-sm font-medium">{user?.name}</span>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <Link 
+                    to="/login" 
+                    className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    Sign In
+                  </Link>
+                  <Link 
+                    to="/register" 
+                    className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-orange-600 focus:outline-none focus:text-orange-600"
+              className="text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 focus:outline-none focus:text-orange-600 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (
@@ -66,45 +112,68 @@ export default function Navbar() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50 rounded-lg mt-2">
-              <Link 
-                to="/" 
-                className="block px-3 py-2 text-gray-700 hover:text-orange-600 font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-lg mt-2 shadow-lg border border-gray-200/50 dark:border-gray-700/50">
               <Link 
                 to="/about" 
-                className="block px-3 py-2 text-gray-700 hover:text-orange-600 font-medium"
+                className={`block px-3 py-2 font-medium rounded-lg transition-colors ${
+                  isActive('/about')
+                    ? 'bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                }`}
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
               </Link>
-              {isLoggedIn && (
+              {isAuthenticated && (
                 <Link 
                   to="/dashboard" 
-                  className="block px-3 py-2 text-gray-700 hover:text-orange-600 font-medium"
+                  className={`block px-3 py-2 font-medium rounded-lg transition-colors ${
+                    isActive('/dashboard')
+                      ? 'bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Dashboard
                 </Link>
               )}
-              <div className="border-t border-gray-200 pt-3 mt-3">
-                <Link 
-                  to="/login" 
-                  className="block px-3 py-2 text-orange-600 hover:text-orange-700 font-medium"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Sign In
-                </Link>
-                <Link 
-                  to="/register" 
-                  className="block px-3 py-2 bg-orange-600 text-white rounded-lg font-medium mx-3 mt-2 text-center"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Sign Up
-                </Link>
+              <div className="border-t border-gray-200 dark:border-gray-600 pt-3 mt-3">
+                {isAuthenticated ? (
+                  <div className="px-3 py-2">
+                    <div className="flex items-center space-x-2 mb-3">
+                      <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-medium">{user?.name?.charAt(0)}</span>
+                      </div>
+                      <div>
+                        <p className="text-gray-900 dark:text-gray-100 font-medium">{user?.name}</p>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">Welcome back!</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <Link 
+                      to="/login" 
+                      className="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Sign In
+                    </Link>
+                    <Link 
+                      to="/register" 
+                      className="block px-3 py-2 bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-lg font-medium mx-3 mt-2 text-center shadow-lg"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

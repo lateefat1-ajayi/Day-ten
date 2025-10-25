@@ -1,29 +1,37 @@
 import { Link } from 'react-router-dom';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-gray-900 dark:to-gray-800">
+      {/* Theme Toggle - Fixed Position */}
+      <div className="fixed top-4 right-4 z-50">
+        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-lg p-2 shadow-lg border border-gray-200/50 dark:border-gray-700/50">
+          <ThemeToggle />
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-orange-800">
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-orange-800 dark:text-orange-300">
               Welcome to Dishcovery
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
               Discover amazing recipes, explore new flavors, and create culinary masterpieces. 
               Join thousands of food enthusiasts in our community.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link 
                 to="/register" 
-                className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg text-base font-medium shadow-md hover:shadow-lg transition-all duration-300"
+                className="bg-orange-600 dark:bg-orange-500 hover:bg-orange-700 dark:hover:bg-orange-600 text-white px-6 py-3 rounded-lg text-base font-medium shadow-md hover:shadow-lg transition-all duration-300"
               >
                 Sign Up
               </Link>
               <Link 
                 to="/login" 
-                className="border-2 border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white px-6 py-3 rounded-lg text-base font-medium transition-all duration-300"
+                className="border-2 border-orange-600 dark:border-orange-400 text-orange-600 dark:text-orange-400 hover:bg-orange-600 dark:hover:bg-orange-500 hover:text-white px-6 py-3 rounded-lg text-base font-medium transition-all duration-300"
               >
                 Sign In
               </Link>
@@ -32,48 +40,48 @@ export default function Home() {
         </div>
         
         {/* Decorative elements */}
-        <div className="absolute top-20 left-10 w-20 h-20 bg-orange-200 rounded-full opacity-50"></div>
-        <div className="absolute bottom-20 right-10 w-32 h-32 bg-yellow-200 rounded-full opacity-50"></div>
+        <div className="absolute top-20 left-10 w-20 h-20 bg-orange-200 dark:bg-orange-800 rounded-full opacity-50"></div>
+        <div className="absolute bottom-20 right-10 w-32 h-32 bg-yellow-200 dark:bg-yellow-800 rounded-full opacity-50"></div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Dishcovery?</h2>
-            <p className="text-xl text-gray-600">Everything you need to elevate your cooking experience</p>
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Why Choose Dishcovery?</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300">Everything you need to elevate your cooking experience</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow bg-gray-50 dark:bg-gray-700">
+              <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🍳</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900">Easy Recipe Discovery</h3>
-              <p className="text-gray-600">Find recipes by category, ingredients, or cuisine type with our intuitive search system.</p>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Easy Recipe Discovery</h3>
+              <p className="text-gray-600 dark:text-gray-300">Find recipes by category, ingredients, or cuisine type with our intuitive search system.</p>
             </div>
             
-            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow bg-gray-50 dark:bg-gray-700">
+              <div className="w-16 h-16 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">📱</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900">Mobile Friendly</h3>
-              <p className="text-gray-600">Access your favorite recipes anywhere with our responsive design that works on all devices.</p>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Mobile Friendly</h3>
+              <p className="text-gray-600 dark:text-gray-300">Access your favorite recipes anywhere with our responsive design that works on all devices.</p>
             </div>
             
-            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="text-center p-6 rounded-xl hover:shadow-lg transition-shadow bg-gray-50 dark:bg-gray-700">
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">👥</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-gray-900">Community Driven</h3>
-              <p className="text-gray-600">Join our community of food lovers, share your creations, and discover new favorites.</p>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Community Driven</h3>
+              <p className="text-gray-600 dark:text-gray-300">Join our community of food lovers, share your creations, and discover new favorites.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-orange-600 to-yellow-600">
+      <section className="py-20 bg-gradient-to-r from-orange-600 to-yellow-600 dark:from-orange-700 dark:to-yellow-700">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl font-bold text-white mb-4">Ready to Start Cooking?</h2>
           <p className="text-xl text-orange-100 mb-8">
@@ -89,7 +97,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
+      <footer className="bg-gray-800 dark:bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="col-span-2">
@@ -141,7 +149,7 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
+          <div className="border-t border-gray-700 dark:border-gray-600 mt-8 pt-8 text-center">
             <p className="text-gray-400">
               © 2025 Dishcovery. All rights reserved.
             </p>

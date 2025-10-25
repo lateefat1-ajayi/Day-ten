@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Register() {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -14,6 +15,7 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [registerError, setRegisterError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,17 +30,18 @@ export default function Register() {
         [name]: ''
       }));
     }
+    if (registerError) {
+      setRegisterError('');
+    }
   };
 
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
-    }
-    
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    } else if (formData.name.trim().length < 2) {
+      newErrors.name = 'Name must be at least 2 characters';
     }
     
     if (!formData.email) {
@@ -69,16 +72,23 @@ export default function Register() {
     if (!validateForm()) return;
     
     setIsLoading(true);
+    setRegisterError('');
     
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Registration attempt:', formData);
-      // Redirect to dashboard on successful registration
+      const result = await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password
+      });
+      
+      if (result.success) {
       navigate('/dashboard');
+      } else {
+        setRegisterError(result.error || 'Registration failed');
+      }
     } catch (error) {
       console.error('Registration error:', error);
-      alert('Registration failed. Please try again.');
+      setRegisterError('Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -87,6 +97,19 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* Back to home link */}
+        <div className="text-center">
+          <Link 
+            to="/" 
+            className="inline-flex items-center text-orange-600 hover:text-orange-700 font-medium"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+          </Link>
+        </div>
+        
         <div>
           <h2 className="mt-6 text-center text-3xl font-bold text-orange-800">
             Create your account
@@ -101,51 +124,32 @@ export default function Register() {
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="bg-white p-8 rounded-xl shadow-lg">
+            {registerError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600">{registerError}</p>
+              </div>
+            )}
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                    First name
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                  Full name
                   </label>
                   <input
-                    id="firstName"
-                    name="firstName"
+                  id="name"
+                  name="name"
                     type="text"
-                    autoComplete="given-name"
+                  autoComplete="name"
                     required
-                    value={formData.firstName}
+                  value={formData.name}
                     onChange={handleChange}
                     className={`mt-1 appearance-none relative block w-full px-3 py-3 border ${
-                      errors.firstName ? 'border-red-300' : 'border-gray-300'
+                    errors.name ? 'border-red-300' : 'border-gray-300'
                     } placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm`}
-                    placeholder="First name"
-                  />
-                  {errors.firstName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
-                  )}
-                </div>
-                
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                    Last name
-                  </label>
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    autoComplete="family-name"
-                    required
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    className={`mt-1 appearance-none relative block w-full px-3 py-3 border ${
-                      errors.lastName ? 'border-red-300' : 'border-gray-300'
-                    } placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm`}
-                    placeholder="Last name"
-                  />
-                  {errors.lastName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
-                  )}
-                </div>
+                  placeholder="Enter your full name"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                )}
               </div>
               
               <div>
